@@ -26,9 +26,11 @@ class NDFlexboxCardsBlock {
 
   // 1. Enqueue admin assets in the backend
   function admin_assets() {
+    wp_register_style('nd-flexbox-card-block', plugin_dir_url(__FILE__) . 'build/index.css');
     wp_register_script('nd-flexbox-card-block', plugin_dir_url(__FILE__) . 'build/index.js', array('wp-blocks', 'wp-element', 'wp-i18n', 'wp-editor'), true, false);
     register_block_type('nd-plugins/nd-flexbox-cards-block', array(
       'editor_script' => 'nd-flexbox-card-block',
+      'editor_style' => 'nd-flexbox-card-block',
       'render_callback' => array($this, 'the_html'),
     ));
   }
