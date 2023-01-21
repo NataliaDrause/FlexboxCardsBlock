@@ -123,21 +123,26 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   category: "design",
   attributes: {
     cardTitle: {
-      type: "string"
+      type: "array",
+      default: [""]
     },
     cardDescription: {
-      type: "string"
+      type: "array",
+      default: [""]
     },
     cardImage: {
-      type: 'string',
+      type: 'array',
       source: 'attribute',
       selector: 'img',
       attribute: 'src'
     },
+    buttonText: {
+      type: "array",
+      default: [""]
+    },
     buttonUrl: {
-      type: 'string',
-      source: 'attribute',
-      attribute: 'src'
+      type: "array",
+      default: [""]
     }
   },
   edit: EditComponent,
@@ -146,30 +151,91 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   }
 });
 function EditComponent(props) {
+  function deleteCard(indexToDelete) {
+    const newCards = props.attributes.cardTitle.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      cardTitle: newCards
+    });
+  }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, {
     className: "flexbox-card-block"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, {
-    className: "flexbox-card-block--items"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Card, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardHeader, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardMedia, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FormFileUpload, {
-    variant: "secondary",
-    accept: "image/*",
-    onChange: event => console.log(event.currentTarget.files)
-  }, "Upload an image"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardBody, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalHeading, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-    label: "Heading:",
-    style: {
-      fontSize: "20px"
+  }, props.attributes.cardTitle.map(function (title, index) {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, {
+      className: "flexbox-card-block--items"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Card, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardHeader, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardMedia, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: "http://plugin-playground.local/wp-content/uploads/2022/12/USA-skyline.jpg",
+      alt: "image",
+      style: {
+        marginBottom: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FormFileUpload, {
+      variant: "secondary",
+      accept: "image/*",
+      onChange: event => console.log(event.currentTarget.files)
+    }, "Upload an image"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardBody, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalHeading, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+      value: title,
+      onChange: newValue => {
+        const newTitle = props.attributes.cardTitle.concat([]);
+        newTitle[index] = newValue;
+        props.setAttributes({
+          cardTitle: newTitle
+        });
+      },
+      autoFocus: title == undefined,
+      label: "Title:",
+      style: {
+        fontSize: "20px"
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
+      value: props.attributes.cardDescription[index],
+      onChange: newValue => {
+        const newDescription = props.attributes.cardDescription.concat([]);
+        newDescription[index] = newValue;
+        props.setAttributes({
+          cardDescription: newDescription
+        });
+      },
+      label: "Description:"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardFooter, {
+      style: {
+        display: "block"
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+      value: props.attributes.buttonText[index],
+      onChange: newValue => {
+        const newText = props.attributes.buttonText.concat([]);
+        newText[index] = newValue;
+        props.setAttributes({
+          buttonText: newText
+        });
+      },
+      label: "View more button text:"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+      value: props.attributes.buttonUrl[index],
+      onChange: newValue => {
+        const newUrl = props.attributes.buttonUrl.concat([]);
+        newUrl[index] = newValue;
+        props.setAttributes({
+          buttonUrl: newUrl
+        });
+      },
+      label: "View more button URL:"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      onClick: () => deleteCard(index),
+      variant: "primary",
+      className: "flexbox-card-block--button"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
+      icon: "trash"
+    }), "Remove card"));
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
+    icon: "plus",
+    onClick: () => {
+      props.setAttributes({
+        cardTitle: props.attributes.cardTitle.concat([undefined])
+      });
     }
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextareaControl, {
-    label: "Content:"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardFooter, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
-    label: "View more button link:"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
-    variant: "primary",
-    className: "flexbox-card-block--button"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
-    icon: "trash"
-  }), "Remove card")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
-    icon: "plus"
   }))));
 }
 })();

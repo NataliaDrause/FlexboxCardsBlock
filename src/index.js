@@ -6,20 +6,16 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   icon: "images-alt",
   category: "design",
   attributes: {
-      cardTitle: { type: "string" },
-      cardDescription: { type: "string" },
+      cardTitle: { type: "array", default: [""] },
+      cardDescription: { type: "array", default: [""] },
       cardImage: { 
-          type: 'string',
+          type: 'array',
           source: 'attribute',
           selector: 'img',
           attribute: 'src', 
       },
-      buttonUrl: {
-          type: 'string',
-          source: 'attribute',
-          attribute: 'src',
-      },
-
+      buttonText: { type: "array", default: [""] },
+      buttonUrl: { type: "array", default: [""] }
   },
   edit: EditComponent,
   save: function() {
@@ -31,35 +27,79 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
 })
 
 function EditComponent(props) {
+
+  function deleteCard(indexToDelete) {
+    const newCards = props.attributes.cardTitle.filter(function(x, index) {
+      return index != indexToDelete;
+    })
+    props.setAttributes({cardTitle: newCards})
+  }
+
   return (
     <Flex className="flexbox-card-block">
-      <FlexItem className="flexbox-card-block--items">
-        <Card>
-          <CardHeader>
-            <CardMedia>
-            <FormFileUpload variant="secondary" accept="image/*" onChange={ ( event ) => console.log( event.currentTarget.files ) } >
-                Upload an image
-            </FormFileUpload>
-            </CardMedia>
-          </CardHeader>
-          <CardBody>
-            <Heading>
-              <TextControl label="Heading:" style={{fontSize: "20px"}} />
-            </Heading>
-            <TextareaControl label="Content:" />
-          </CardBody>
-          <CardFooter>
-            <TextControl label="View more button link:" />
-          </CardFooter>
-        </Card>
-        <Button variant="primary" className="flexbox-card-block--button">
-          <Icon icon="trash" />
-          Remove card
-        </Button>
-      </FlexItem>
+      {props.attributes.cardTitle.map(function(title, index) {
+        return (
+          <FlexItem className="flexbox-card-block--items">
+            <Card>
+              <CardHeader>
+                <CardMedia>
+                  {/* IMAGE UPLOAD */}
+                  {/*
+                  <img src={props.attributes.cardImage[index]} onChange={newValue => {
+                    const newImage = props.attributes.cardImage.concat([])
+                    newImage[index] = newValue;
+                    props.setAttributes({cardImage: newImage})
+                  }} alt="my image" style={{marginBottom: "10px"}} />
+                  */}
+                  <img src="http://plugin-playground.local/wp-content/uploads/2022/12/USA-skyline.jpg" alt="image" style={{marginBottom: "10px"}} />
+                  <FormFileUpload variant="secondary" accept="image/*" onChange={ ( event ) => console.log( event.currentTarget.files ) } >
+                      Upload an image
+                  </FormFileUpload>
+                </CardMedia>
+              </CardHeader>
+              <CardBody>
+                <Heading>
+                  {/* TITLE */}
+                  <TextControl value={title} onChange={newValue => {
+                    const newTitle = props.attributes.cardTitle.concat([])
+                    newTitle[index] = newValue;
+                    props.setAttributes({cardTitle: newTitle})
+                  }} autoFocus={title == undefined} label="Title:" style={{fontSize: "20px"}} />
+                </Heading>
+                {/* DESCRIPTION */}
+                <TextareaControl value={props.attributes.cardDescription[index]} onChange={newValue => {
+                  const newDescription = props.attributes.cardDescription.concat([])
+                  newDescription[index] = newValue;
+                  props.setAttributes({cardDescription: newDescription})
+                }} label="Description:" />
+              </CardBody>
+              <CardFooter style={{display: "block"}}>
+                {/* BUTTON TEXT */}
+                <TextControl value={props.attributes.buttonText[index]} onChange={newValue => {
+                  const newText = props.attributes.buttonText.concat([])
+                  newText[index] = newValue;
+                  props.setAttributes({buttonText: newText})
+                }} label="View more button text:" />
+                {/* BUTTON URL */}
+                <TextControl value={props.attributes.buttonUrl[index]} onChange={newValue => {
+                  const newUrl = props.attributes.buttonUrl.concat([])
+                  newUrl[index] = newValue;
+                  props.setAttributes({buttonUrl: newUrl})
+                }} label="View more button URL:" />
+              </CardFooter>
+            </Card>
+            <Button onClick={() => deleteCard(index)} variant="primary" className="flexbox-card-block--button">
+              <Icon icon="trash" />
+              Remove card
+            </Button>
+          </FlexItem>
+        )
+      })}
       <FlexItem>
         <Button>
-          <Icon icon="plus" />
+          <Icon icon="plus" onClick={() => {
+            props.setAttributes({cardTitle: props.attributes.cardTitle.concat([undefined])});
+          }} />
         </Button>
       </FlexItem>
     </Flex>
