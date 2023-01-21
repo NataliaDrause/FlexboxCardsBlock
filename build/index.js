@@ -14,6 +14,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "@wordpress/block-editor":
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["blockEditor"];
+
+/***/ }),
+
 /***/ "@wordpress/components":
 /*!************************************!*\
   !*** external ["wp","components"] ***!
@@ -114,6 +124,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./index.scss */ "./src/index.scss");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -130,11 +143,17 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
       type: "array",
       default: [""]
     },
-    cardImage: {
-      type: 'array',
-      source: 'attribute',
-      selector: 'img',
-      attribute: 'src'
+    imageId: {
+      type: "array",
+      default: undefined
+    },
+    imageAlt: {
+      type: "array",
+      default: [""]
+    },
+    imageUrl: {
+      type: "array",
+      default: [""]
     },
     buttonText: {
       type: "array",
@@ -151,12 +170,90 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   }
 });
 function EditComponent(props) {
+  const ALLOWED_MEDIA_TYPES = ['image'];
+  function onSelectImage(media, index) {
+    const newMediaId = props.attributes.imageId.concat([]);
+    newMediaId[index] = media.id;
+    props.setAttributes({
+      imageId: newMediaId
+    });
+    const newMediaAlt = props.attributes.imageAlt.concat([]);
+    newMediaAlt[index] = media.alt;
+    props.setAttributes({
+      imageAlt: newMediaAlt
+    });
+    const newMediaUrl = props.attributes.imageUrl.concat([]);
+    newMediaUrl[index] = media.url;
+    props.setAttributes({
+      imageUrl: newMediaUrl
+    });
+  }
+  function deleteImage(index) {
+    const newMediaId = props.attributes.imageId.concat([]);
+    newMediaId[index] = undefined;
+    props.setAttributes({
+      imageId: newMediaId
+    });
+    const newMediaAlt = props.attributes.imageAlt.concat([]);
+    newMediaAlt[index] = "";
+    props.setAttributes({
+      imageAlt: newMediaAlt
+    });
+    const newMediaUrl = props.attributes.imageUrl.concat([]);
+    newMediaUrl[index] = "";
+    props.setAttributes({
+      imageUrl: newMediaUrl
+    });
+  }
+  function displayButton(index) {
+    if (props.attributes.imageId[index] == undefined) {
+      return {
+        display: "none"
+      };
+    }
+  }
   function deleteCard(indexToDelete) {
-    const newCards = props.attributes.cardTitle.filter(function (x, index) {
+    const newTitle = props.attributes.cardTitle.filter(function (x, index) {
       return index != indexToDelete;
     });
     props.setAttributes({
-      cardTitle: newCards
+      cardTitle: newTitle
+    });
+    const newDescription = props.attributes.cardDescription.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      cardDescription: newDescription
+    });
+    const newImageId = props.attributes.imageId.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      imageId: newImageId
+    });
+    const newImageAlt = props.attributes.imageAlt.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      imageAlt: newImageAlt
+    });
+    const newImageUrl = props.attributes.imageUrl.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      imageUrl: newImageUrl
+    });
+    const newButtonText = props.attributes.buttonText.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      buttonText: newButtonText
+    });
+    const newButtonUrl = props.attributes.buttonUrl.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({
+      buttonUrl: newButtonUrl
     });
   }
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, {
@@ -164,17 +261,37 @@ function EditComponent(props) {
   }, props.attributes.cardTitle.map(function (title, index) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, {
       className: "flexbox-card-block--items"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Card, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardHeader, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardMedia, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: "http://plugin-playground.local/wp-content/uploads/2022/12/USA-skyline.jpg",
-      alt: "image",
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Card, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardHeader, {
       style: {
-        marginBottom: "10px"
+        display: "block"
       }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FormFileUpload, {
-      variant: "secondary",
-      accept: "image/*",
-      onChange: event => console.log(event.currentTarget.files)
-    }, "Upload an image"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardBody, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalHeading, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardMedia, {
+      className: "flexbox-card-block--image"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: props.attributes.imageUrl[index],
+      alt: props.attributes.imageAlt[index]
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.MediaUploadCheck, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.MediaUpload, {
+      onSelect: media => onSelectImage(media, index),
+      allowedTypes: ALLOWED_MEDIA_TYPES,
+      value: props.attributes.imageId,
+      render: _ref => {
+        let {
+          open
+        } = _ref;
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+          onClick: open,
+          variant: "secondary",
+          className: "flexbox-card-block--image-btn"
+        }, "Open Media Library");
+      }
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      className: "flexbox-card-block--image-btn",
+      style: displayButton(index),
+      onClick: () => deleteImage(index),
+      variant: "tertiery"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
+      icon: "trash"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.CardBody, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalHeading, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
       value: title,
       onChange: newValue => {
         const newTitle = props.attributes.cardTitle.concat([]);

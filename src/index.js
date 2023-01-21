@@ -1,5 +1,6 @@
 import "./index.scss"
 import {TextControl, TextareaControl, Flex, FlexBlock, FlexItem, Button, Icon, Card, CardHeader, CardBody, CardFooter, CardMedia, ExternalLink, FormFileUpload,  __experimentalText as Text, __experimentalHeading as Heading,} from "@wordpress/components"
+import { MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 
 wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   title: "Flexbox Cards Block",
@@ -8,12 +9,9 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   attributes: {
       cardTitle: { type: "array", default: [""] },
       cardDescription: { type: "array", default: [""] },
-      cardImage: { 
-          type: 'array',
-          source: 'attribute',
-          selector: 'img',
-          attribute: 'src', 
-      },
+      imageId: { type: "array", default: undefined },
+      imageAlt: { type: "array", default: [""] },
+      imageUrl: { type: "array", default: [""] },
       buttonText: { type: "array", default: [""] },
       buttonUrl: { type: "array", default: [""] }
   },
@@ -28,11 +26,78 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
 
 function EditComponent(props) {
 
+  const ALLOWED_MEDIA_TYPES = [ 'image' ];
+
+  function onSelectImage(media, index) {
+    
+    const newMediaId = props.attributes.imageId.concat([]);
+    newMediaId[index] = media.id;
+    props.setAttributes({imageId: newMediaId});
+
+    const newMediaAlt = props.attributes.imageAlt.concat([]);
+    newMediaAlt[index] = media.alt;
+    props.setAttributes({imageAlt: newMediaAlt});
+
+    const newMediaUrl = props.attributes.imageUrl.concat([]);
+    newMediaUrl[index] = media.url;
+    props.setAttributes({imageUrl: newMediaUrl})
+  }
+
+  function deleteImage(index) {
+    const newMediaId = props.attributes.imageId.concat([]);
+    newMediaId[index] = undefined;
+    props.setAttributes({imageId: newMediaId})
+
+    const newMediaAlt = props.attributes.imageAlt.concat([]);
+    newMediaAlt[index] = "";
+    props.setAttributes({imageAlt: newMediaAlt})
+
+    const newMediaUrl = props.attributes.imageUrl.concat([]);
+    newMediaUrl[index] = "";
+    props.setAttributes({imageUrl: newMediaUrl})
+  }
+
+  function displayButton(index) {
+    if (props.attributes.imageId[index] == undefined) {
+      return {display: "none"};
+    }
+  }
+
   function deleteCard(indexToDelete) {
-    const newCards = props.attributes.cardTitle.filter(function(x, index) {
+    const newTitle = props.attributes.cardTitle.filter(function(x, index) {
       return index != indexToDelete;
-    })
-    props.setAttributes({cardTitle: newCards})
+    });
+    props.setAttributes({cardTitle: newTitle});
+
+    const newDescription = props.attributes.cardDescription.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({cardDescription: newDescription});
+
+    const newImageId = props.attributes.imageId.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({imageId: newImageId});
+
+    const newImageAlt = props.attributes.imageAlt.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({imageAlt: newImageAlt});
+
+    const newImageUrl = props.attributes.imageUrl.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({imageUrl: newImageUrl});
+
+    const newButtonText = props.attributes.buttonText.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({buttonText: newButtonText});
+
+    const newButtonUrl = props.attributes.buttonUrl.filter(function(x, index) {
+      return index != indexToDelete;
+    });
+    props.setAttributes({buttonUrl: newButtonUrl});
   }
 
   return (
@@ -41,21 +106,24 @@ function EditComponent(props) {
         return (
           <FlexItem className="flexbox-card-block--items">
             <Card>
-              <CardHeader>
-                <CardMedia>
+              <CardHeader style={{display: "block"}}>
+                <CardMedia className="flexbox-card-block--image" >
                   {/* IMAGE UPLOAD */}
-                  {/*
-                  <img src={props.attributes.cardImage[index]} onChange={newValue => {
-                    const newImage = props.attributes.cardImage.concat([])
-                    newImage[index] = newValue;
-                    props.setAttributes({cardImage: newImage})
-                  }} alt="my image" style={{marginBottom: "10px"}} />
-                  */}
-                  <img src="http://plugin-playground.local/wp-content/uploads/2022/12/USA-skyline.jpg" alt="image" style={{marginBottom: "10px"}} />
-                  <FormFileUpload variant="secondary" accept="image/*" onChange={ ( event ) => console.log( event.currentTarget.files ) } >
-                      Upload an image
-                  </FormFileUpload>
+                  <img src={props.attributes.imageUrl[index]} alt={props.attributes.imageAlt[index]} />
                 </CardMedia>
+                <MediaUploadCheck>
+                  <MediaUpload
+                    onSelect={ media => onSelectImage(media, index) }
+                    allowedTypes={ ALLOWED_MEDIA_TYPES }
+                    value={ props.attributes.imageId }
+                    render={ ( { open } ) => (
+                      <Button onClick={ open } variant="secondary" className="flexbox-card-block--image-btn">Open Media Library</Button>
+                    ) }
+                  />
+                </MediaUploadCheck>
+                <Button className="flexbox-card-block--image-btn" style={displayButton(index)} onClick={() => deleteImage(index)} variant="tertiery" >
+                  <Icon icon="trash" />
+                </Button>
               </CardHeader>
               <CardBody>
                 <Heading>

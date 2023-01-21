@@ -14,6 +14,17 @@
   max-width: 45% !important;
 }
 
+.flexbox-card-block--image {
+  max-height: 150px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.flexbox-card-block--image-btn {
+  display: inline-block;
+}
+
 .flexbox-card-block--button {
   display: block;
   margin: 10px auto 20px auto;
