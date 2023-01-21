@@ -145,7 +145,7 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
     },
     imageId: {
       type: "array",
-      default: undefined
+      default: [null]
     },
     imageAlt: {
       type: "array",
@@ -174,39 +174,31 @@ function EditComponent(props) {
   function onSelectImage(media, index) {
     const newMediaId = props.attributes.imageId.concat([]);
     newMediaId[index] = media.id;
-    props.setAttributes({
-      imageId: newMediaId
-    });
     const newMediaAlt = props.attributes.imageAlt.concat([]);
     newMediaAlt[index] = media.alt;
-    props.setAttributes({
-      imageAlt: newMediaAlt
-    });
     const newMediaUrl = props.attributes.imageUrl.concat([]);
     newMediaUrl[index] = media.url;
     props.setAttributes({
+      imageId: newMediaId,
+      imageAlt: newMediaAlt,
       imageUrl: newMediaUrl
     });
   }
   function deleteImage(index) {
     const newMediaId = props.attributes.imageId.concat([]);
-    newMediaId[index] = undefined;
-    props.setAttributes({
-      imageId: newMediaId
-    });
+    newMediaId[index] = null;
     const newMediaAlt = props.attributes.imageAlt.concat([]);
     newMediaAlt[index] = "";
-    props.setAttributes({
-      imageAlt: newMediaAlt
-    });
     const newMediaUrl = props.attributes.imageUrl.concat([]);
     newMediaUrl[index] = "";
     props.setAttributes({
+      imageId: newMediaId,
+      imageAlt: newMediaAlt,
       imageUrl: newMediaUrl
     });
   }
   function displayButton(index) {
-    if (props.attributes.imageId[index] == undefined) {
+    if (props.attributes.imageId[index] == null) {
       return {
         display: "none"
       };
@@ -216,43 +208,31 @@ function EditComponent(props) {
     const newTitle = props.attributes.cardTitle.filter(function (x, index) {
       return index != indexToDelete;
     });
-    props.setAttributes({
-      cardTitle: newTitle
-    });
     const newDescription = props.attributes.cardDescription.filter(function (x, index) {
       return index != indexToDelete;
-    });
-    props.setAttributes({
-      cardDescription: newDescription
     });
     const newImageId = props.attributes.imageId.filter(function (x, index) {
       return index != indexToDelete;
     });
-    props.setAttributes({
-      imageId: newImageId
-    });
     const newImageAlt = props.attributes.imageAlt.filter(function (x, index) {
       return index != indexToDelete;
-    });
-    props.setAttributes({
-      imageAlt: newImageAlt
     });
     const newImageUrl = props.attributes.imageUrl.filter(function (x, index) {
       return index != indexToDelete;
     });
-    props.setAttributes({
-      imageUrl: newImageUrl
-    });
     const newButtonText = props.attributes.buttonText.filter(function (x, index) {
       return index != indexToDelete;
-    });
-    props.setAttributes({
-      buttonText: newButtonText
     });
     const newButtonUrl = props.attributes.buttonUrl.filter(function (x, index) {
       return index != indexToDelete;
     });
     props.setAttributes({
+      cardTitle: newTitle,
+      cardDescription: newDescription,
+      imageId: newImageId,
+      imageAlt: newImageAlt,
+      imageUrl: newImageUrl,
+      buttonText: newButtonText,
       buttonUrl: newButtonUrl
     });
   }
