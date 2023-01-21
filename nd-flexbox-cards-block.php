@@ -36,8 +36,13 @@ class NDFlexboxCardsBlock {
   }
 
   function the_html($attributes) {
+    wp_enqueue_script('nd-flexbox-card-frontend', plugin_dir_url(__FILE__) . 'build/frontend.js', array('wp-element'), '1.0', true);
+    wp_enqueue_style('nd-flexbox-card-frontend', plugin_dir_url(__FILE__) . 'build/frontend.css');
+    
     ob_start(); ?>
-    <h3>Output</h3>
+
+    <div class="nd-flexbox-card-updateme"><pre style="display:none"><?php echo wp_json_encode($attributes); ?></pre></div>
+    
     <?php
     return ob_get_clean();
   }
