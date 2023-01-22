@@ -134,6 +134,7 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   title: "Flexbox Cards Block",
   icon: "images-alt",
   category: "design",
+  description: "Add Flexbox cards with image and CTA button to your page.",
   attributes: {
     cardTitle: {
       type: "array",
@@ -172,9 +173,16 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
       default: "left"
     }
   },
+  example: {
+    attributes: {
+      cardTitle: ["Card Title", "Another Card"],
+      cardDescription: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."],
+      buttonText: ["View more", "View more"]
+    }
+  },
   edit: EditComponent,
   save: function () {
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Todaty the sky.");
+    return null;
   }
 });
 function EditComponent(props) {
