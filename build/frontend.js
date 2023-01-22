@@ -151,7 +151,10 @@ function FlexboxCards(props) {
       src: props.imageUrl[index],
       alt: props.imageAlt[index]
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "item-text"
+      className: "item-text",
+      style: {
+        textAlign: props.textAlignment
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, props.cardDescription[index]), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
       action: props.buttonUrl[index]
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {

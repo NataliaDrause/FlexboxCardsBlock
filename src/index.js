@@ -1,6 +1,6 @@
 import "./index.scss"
-import {TextControl, TextareaControl, Flex, FlexBlock, FlexItem, Button, Icon, Card, CardHeader, CardBody, CardFooter, CardMedia, ExternalLink, FormFileUpload,  __experimentalText as Text, __experimentalHeading as Heading, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
-import { MediaUpload, MediaUploadCheck, InspectorControls } from '@wordpress/block-editor';
+import {TextControl, TextareaControl, Flex, FlexItem, Button, Icon, Card, CardHeader, CardBody, CardFooter, CardMedia,  __experimentalText as Text, __experimentalHeading as Heading, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
+import { MediaUpload, MediaUploadCheck, InspectorControls, BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 
 wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
   title: "Flexbox Cards Block",
@@ -14,7 +14,8 @@ wp.blocks.registerBlockType("nd-plugins/nd-flexbox-cards-block", {
       imageUrl: { type: "array", default: [""] },
       buttonText: { type: "array", default: [""] },
       buttonUrl: { type: "array", default: [""] },
-      bgColor: { type: "string", default: "#FFFFFF"}
+      bgColor: { type: "string", default: "#FFFFFF"},
+      textAlignment: { type: "string", default: "left"}
   },
   edit: EditComponent,
   save: function() {
@@ -89,6 +90,9 @@ function EditComponent(props) {
   return (
     
     <Flex className="flexbox-card-block">
+      <BlockControls>
+        <AlignmentToolbar value={props.attributes.textAlignment} onChange={x => props.setAttributes({textAlignment: x})} />
+      </BlockControls>
       <InspectorControls>
         <PanelBody title="Card Background Color" initialOpen={true}>
           <PanelRow>

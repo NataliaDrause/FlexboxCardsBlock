@@ -18,7 +18,7 @@ function FlexboxCards(props) {
           return (
             <li className="item" style={{backgroundColor: props.bgColor}}>
               <img src={props.imageUrl[index]} alt={props.imageAlt[index]}/>
-              <div className="item-text">
+              <div className="item-text" style={{textAlign: props.textAlignment}}>
                 <h3>{title}</h3>
                 <p>{props.cardDescription[index]}</p>
                 <form action={props.buttonUrl[index]}>
