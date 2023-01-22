@@ -143,7 +143,10 @@ function FlexboxCards(props) {
     className: "item-list"
   }, props.cardTitle.map(function (title, index) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-      className: "item"
+      className: "item",
+      style: {
+        backgroundColor: props.bgColor
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
       src: props.imageUrl[index],
       alt: props.imageAlt[index]

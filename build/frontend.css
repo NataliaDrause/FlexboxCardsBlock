@@ -77,12 +77,12 @@
 .nd-flexbox-card-container .filledOutline {
   border: 2px solid;
   border-radius: 5px;
-  background-color: white;
+  background-color: transparent;
   transition: 0.4s;
 }
 .nd-flexbox-card-container .filledOutline:hover {
   border: 2px solid black;
-  background-color: black;
+  background-color: black !important;
   color: white;
 }
 

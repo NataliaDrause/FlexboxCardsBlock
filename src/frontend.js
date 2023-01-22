@@ -16,7 +16,7 @@ function FlexboxCards(props) {
       <ul className="item-list">
         {props.cardTitle.map(function(title, index) {
           return (
-            <li className="item">
+            <li className="item" style={{backgroundColor: props.bgColor}}>
               <img src={props.imageUrl[index]} alt={props.imageAlt[index]}/>
               <div className="item-text">
                 <h3>{title}</h3>
