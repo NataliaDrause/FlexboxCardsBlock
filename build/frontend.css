@@ -7,7 +7,6 @@
   min-width: 320px;
   margin: 0 auto;
   /* Flexbox Styling */
-  /* Inspired by https://www.aaron-gustafson.com/notebook/playing-with-flexbox-and-quantity-queries/ */
   /* Button styles */
   /* Design source: https://codepen.io/whatevers2011/pen/WNwGpmo */
 }
@@ -29,12 +28,7 @@
   opacity: 1;
   transition: all 0.5s ease;
 }
-.nd-flexbox-card-container h1 {
-  background-color: #38678f;
-  color: #fff;
-  padding: 1.25rem;
-}
-.nd-flexbox-card-container h2 {
+.nd-flexbox-card-container h3 {
   margin: 0;
 }
 .nd-flexbox-card-container p {
@@ -52,14 +46,23 @@
 .nd-flexbox-card-container .item-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: start;
 }
 .nd-flexbox-card-container .item {
-  flex-grow: auto;
-  min-width: 250px;
-  max-width: -moz-min-content;
-  max-width: min-content;
+  max-width: 300px;
   margin: 1rem;
+}
+@media (max-width: 1250px) {
+  .nd-flexbox-card-container .item {
+    max-width: 220px;
+    margin: 0.5rem;
+  }
+}
+@media (max-width: 620px) {
+  .nd-flexbox-card-container .item {
+    max-width: 500px;
+    margin: 1rem;
+  }
 }
 .nd-flexbox-card-container form {
   display: flex;

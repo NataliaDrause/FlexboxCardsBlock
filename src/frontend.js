@@ -19,7 +19,7 @@ function FlexboxCards(props) {
             <li className="item">
               <img src={props.imageUrl[index]} alt={props.imageAlt[index]}/>
               <div className="item-text">
-                <h2>{title}</h2>
+                <h3>{title}</h3>
                 <p>{props.cardDescription[index]}</p>
                 <form action={props.buttonUrl[index]}>
                   <button type="submit" className="filledOutline">{props.buttonText[index]}</button>
