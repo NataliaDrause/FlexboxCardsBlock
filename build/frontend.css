@@ -79,6 +79,7 @@
   border-radius: 5px;
   background-color: transparent;
   transition: 0.4s;
+  color: #000000;
 }
 .nd-flexbox-card-container .filledOutline:hover {
   border: 2px solid black;
